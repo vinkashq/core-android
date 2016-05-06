@@ -8,7 +8,7 @@ import vinkas.library.R;
 /**
  * Created by Vinoth on 3-5-16.
  */
-public class Application extends android.app.Application {
+public abstract class Application extends android.app.Application {
 
     private Database database;
 
@@ -20,6 +20,8 @@ public class Application extends android.app.Application {
         this.database = database;
     }
 
+    public abstract void setDatabase();
+
     public boolean isReady() {
         if(getDatabase().isReady())
             return true;
@@ -29,7 +31,7 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        setDatabase(new Database(getApplicationContext(), getResources().getBoolean(R.bool.persistence_enabled), getString(R.string.firebase_io_hostname)));
+        setDatabase();
     }
 
     public void setGoogleSignInAccount(GoogleSignInAccount googleSignInAccount) {

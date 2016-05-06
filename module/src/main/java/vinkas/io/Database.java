@@ -22,6 +22,16 @@ public class Database implements Firebase.AuthResultHandler {
 
     private static final String HTTPS = "https://";
     private Account account;
+    private String accountId;
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
     private boolean persistenceEnabled;
 
     public boolean isPersistenceEnabled() {
@@ -39,6 +49,7 @@ public class Database implements Firebase.AuthResultHandler {
 
     protected void setAccount(Account account) {
         this.account = account;
+        setAccountId(this.account.getId());
     }
 
     @Override

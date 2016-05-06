@@ -13,10 +13,15 @@ import vinkas.util.Helper;
 /**
  * Created by Vinoth on 3-5-16.
  */
-public abstract class Object implements ValueEventListener {
+public abstract class Object implements ValueEventListener, Firebase.CompletionListener {
 
-    private String childPath;
     protected boolean haveData = false;
+
+    @Override
+    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+        if (firebaseError != null)
+            Helper.onError(firebaseError);
+    }
 
     public boolean haveData() {
         return haveData;
@@ -24,14 +29,6 @@ public abstract class Object implements ValueEventListener {
 
     public void setHaveData(boolean haveData) {
         this.haveData = haveData;
-    }
-
-    public String getChildPath() {
-        return childPath;
-    }
-
-    public void setChildPath(String childPath) {
-        this.childPath = childPath;
     }
 
     @Override
@@ -44,13 +41,12 @@ public abstract class Object implements ValueEventListener {
         if (dataSnapshot.exists()) {
             onRead(dataSnapshot);
             setHaveData(true);
-        }
-        else
+        } else
             onNonExist();
     }
 
     public void onNonExist() {
-        if(isValid())
+        if (isValid())
             write();
     }
 
@@ -66,23 +62,36 @@ public abstract class Object implements ValueEventListener {
 
     public abstract void onRead(String key, java.lang.Object value);
 
-    protected HashMap<String, String> map;
+    protected HashMap<String, java.lang.Object> map;
 
     public void write() {
-        map = new HashMap<String, String>();
-        mapData();
-        getFirebase().setValue(map);
+        getFirebase().setValue(map, this);
     }
 
-    public abstract void mapData();
-
-    public Object(Database database, String childPath) {
-        setDatabase(database);
-        setChildPath(childPath);
-        setFirebase(getDatabase().getFirebase().child(childPath));
+    public void write(Object priority) {
+        getFirebase().setPriority(priority);
+        write();
     }
 
-    private Database database;
+    public String get(String key) {
+        return map.get(key).toString();
+    }
+
+    public void set(String key, java.lang.Object value) {
+        map.put(key, value);
+    }
+
+    public Object(Firebase firebase) {
+        setFirebase(firebase);
+        map = new HashMap<String, java.lang.Object>();
+    }
+
+    public Object(DataSnapshot dataSnapshot) {
+        setFirebase(dataSnapshot.getRef());
+        map = new HashMap<String, java.lang.Object>();
+        onDataChange(dataSnapshot);
+    }
+
     protected Firebase firebase;
 
     public Firebase getFirebase() {
@@ -95,14 +104,6 @@ public abstract class Object implements ValueEventListener {
 
     public void read() {
         getFirebase().addListenerForSingleValueEvent(this);
-    }
-
-    public Database getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(Database database) {
-        this.database = database;
     }
 
 }

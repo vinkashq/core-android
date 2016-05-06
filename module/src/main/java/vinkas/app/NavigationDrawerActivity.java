@@ -3,7 +3,6 @@ package vinkas.app;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,36 +10,131 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewStub;
+import android.widget.TextView;
 
+import vinkas.io.Account;
 import vinkas.library.R;
 
-public class NavigationDrawerActivity extends Activity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public abstract class NavigationDrawerActivity extends Activity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab) {
+            onFabClick(v);
+        }
+    }
+
+    public abstract void onFabClick(View v);
+
+    private FloatingActionButton fab;
+    private Toolbar toolbar;
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
+
+    public void setToolbar(Toolbar toolbar) {
+        this.toolbar = toolbar;
+        setSupportActionBar(this.toolbar);
+    }
+
+    public FloatingActionButton getFab() {
+        return fab;
+    }
+
+    public void setFab(FloatingActionButton floatingActionButton) {
+        this.fab = floatingActionButton;
+        fab.setOnClickListener(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setToolbar((Toolbar) findViewById(R.id.toolbar));
+        setFab((FloatingActionButton) findViewById(R.id.fab));
+        setDrawer((DrawerLayout) findViewById(R.id.drawer_layout));
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private View content;
+    private int navigationMenu, menu, layout;
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    public View getContent() {
+        return content;
+    }
+
+    public void setContent(View content) {
+        this.content = content;
+    }
+
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
+    public void setDrawer(DrawerLayout drawerLayout) {
+        this.drawer = drawerLayout;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawer, getToolbar(), R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    public NavigationView getNavigationView() {
+        return navigationView;
+    }
+
+    public int getLayout() {
+        return layout;
+    }
+
+    public void setLayout(int layout) {
+        this.layout = layout;
+        ViewStub viewStub = (ViewStub) findViewById(R.id.contentPanel);
+        viewStub.setLayoutResource(this.layout);
+        setContent(viewStub.inflate());
+    }
+
+    public int getMenu() {
+        return menu;
+    }
+
+    public void setMenu(int resID) {
+        this.menu = resID;
+    }
+
+    public int getNavigationMenu() {
+        return navigationMenu;
+    }
+
+    public void setNavigationMenu(int resID) {
+        this.navigationMenu = resID;
+        setNavigationView((NavigationView) findViewById(R.id.nav_view));
+    }
+
+    private View header;
+
+    public View getHeader() {
+        return header;
+    }
+
+    public void setHeader(View view) {
+        header = view;
+        TextView tvName = (TextView) header.findViewById(R.id.name);
+        TextView tvEmail = (TextView) header.findViewById(R.id.email);
+        Account account = getApp().getDatabase().getAccount();
+        tvName.setText(account.getName());
+        tvEmail.setText(account.getEmail());
+    }
+
+    public void setNavigationView(NavigationView view) {
+        navigationView = view;
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.inflateMenu(getNavigationMenu());
+        setHeader(navigationView.getHeaderView(0));
     }
 
     @Override
@@ -55,46 +149,16 @@ public class NavigationDrawerActivity extends Activity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.navigation_drawer, menu);
+        getMenuInflater().inflate(getMenu(), menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+    public abstract boolean onOptionsItemSelected(MenuItem item);
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

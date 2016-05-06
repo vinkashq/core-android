@@ -9,9 +9,9 @@ import java.lang.*;
 /**
  * Created by Vinoth on 3-5-16.
  */
-public class Account extends Object {
+public class Account extends Item {
 
-    private String id, name, email;
+    private String id;
     private GoogleSignInAccount googleAccount;
 
     public Account(Database database, AuthData authData) {
@@ -44,25 +44,13 @@ public class Account extends Object {
     }
 
     @Override
-    public void onRead(String key, java.lang.Object value) {
-        switch (key) {
-            case "Name":
-                setName(value.toString());
-                break;
-            case "Email":
-                setEmail(value.toString());
-                break;
-        }
-    }
-
-    @Override
     protected void setFirebase(Firebase firebase) {
         super.setFirebase(firebase);
         firebase.keepSynced(true);
     }
 
     protected void setEmail(String email) {
-        this.email = email;
+        set("Email", email);
     }
 
     protected void setId(String id) {
@@ -70,25 +58,19 @@ public class Account extends Object {
     }
 
     public String getName() {
-        return name;
+        return get("Name");
     }
 
     public void setName(String name) {
-        this.name = name;
+        set("Name", name);
     }
 
     public String getEmail() {
-        return email;
+        return get("Email");
     }
 
     public String getId() {
         return id;
-    }
-
-    @Override
-    public void mapData() {
-        map.put("Name", getName());
-        map.put("Email", getEmail());
     }
 
 }

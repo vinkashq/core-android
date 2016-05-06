@@ -15,6 +15,7 @@
     <style name="Theme.Vinkas.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">@color/accent_light</item>
     </style>
 
     <style name="ThemeOverlay.Vinkas.Dark.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
@@ -26,8 +27,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Vinkas.Light.DarkActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Vinkas.Light.DarkActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="TextAppearance.Vinkas.Dark" parent="TextAppearance.AppCompat.Inverse">
+        <item name="android:textColorHintInverse">@android:color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
 
 </resources>

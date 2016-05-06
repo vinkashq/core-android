@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.FirebaseException;
 
+import java.util.UUID;
+
 import vinkas.library.BuildConfig;
 
 /**
@@ -19,7 +21,7 @@ public class Helper {
     public static final int RESULT_ERROR = 1003;
 
     public static void onException(Exception exception) {
-        if (BuildConfig.DEBUG)
+        //if (BuildConfig.DEBUG)
             exception.printStackTrace();
     }
 
@@ -36,6 +38,10 @@ public class Helper {
 
     public static void onFirebaseException(FirebaseException firebaseException) {
         onException(firebaseException);
+    }
+
+    public static String generateId() {
+        return UUID.randomUUID().toString();
     }
 
 }
