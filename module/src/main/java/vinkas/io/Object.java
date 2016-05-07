@@ -1,5 +1,7 @@
 package vinkas.io;
 
+import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -16,6 +18,15 @@ import vinkas.util.Helper;
 public abstract class Object implements ValueEventListener, Firebase.CompletionListener, Map.Listener {
 
     protected boolean haveData = false;
+    protected boolean synced = false;
+
+    public boolean isSynced() {
+        return synced;
+    }
+
+    public void setSynced(boolean synced) {
+        this.synced = synced;
+    }
 
     @Override
     public void onDataChange(String key, java.lang.Object value) {
@@ -26,6 +37,8 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
         if (firebaseError != null)
             Helper.onError(firebaseError);
+        else
+            setSynced(true);
     }
 
     public boolean haveData() {
@@ -46,6 +59,7 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
         if (dataSnapshot.exists()) {
             onRead(dataSnapshot);
             setHaveData(true);
+            setSynced(true);
         } else
             onNonExist();
     }
@@ -65,7 +79,9 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
         }
     }
 
-    public abstract void onRead(String key, java.lang.Object value);
+    public void onRead(String key, java.lang.Object value) {
+        set(key, value);
+    }
 
     protected Map map;
 
@@ -79,7 +95,15 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
     }
 
     public String get(String key) {
-        return map.get(key).toString();
+        java.lang.Object o = getObject(key);
+        if(o == null)
+            return null;
+        else
+            return o.toString();
+    }
+
+    public java.lang.Object getObject(String key) {
+        return map.get(key);
     }
 
     public void set(String key, java.lang.Object value) {

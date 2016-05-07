@@ -14,7 +14,6 @@ public abstract class List extends Object implements DatabaseHaver, ChildEventLi
 
     @Override
     public void onDataChange(String key, java.lang.Object value) {
-
     }
 
     public abstract ListItem getItem(DataSnapshot dataSnapshot);

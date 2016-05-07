@@ -12,22 +12,21 @@ import com.firebase.client.FirebaseError;
  */
 public abstract class ListItem extends Object {
 
+    public final static String KEY = "key";
+
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
         super.onComplete(firebaseError, firebase);
-        if(firebaseError == null && getList() != null) {
+        if (firebaseError == null) {
             getList().getItems().put(getKey(), this);
         }
     }
 
-    @Override
-    public void onRead(String key, java.lang.Object value) {
-        set(key, value);
-    }
-
-    public ListItem(DataSnapshot dataSnapshot) {
-        super(dataSnapshot);
+    public ListItem(List list, DataSnapshot dataSnapshot) {
+        super(list.getFirebase().child(dataSnapshot.getKey()));
         setKey(dataSnapshot.getKey());
+        setList(list);
+        onDataChange(dataSnapshot);
     }
 
     public ListItem(List list) {

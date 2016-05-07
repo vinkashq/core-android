@@ -27,7 +27,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListItem.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ListItem.ViewHolder holder, int position) {
-        
+
     }
 
     private Items items;
