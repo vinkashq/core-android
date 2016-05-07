@@ -6,5 +6,5 @@
     <string name="vinkas_www">www.vinkas.com</string>
 
     <string name="firebase_io_hostname">EXAMPLE.firebaseio.com</string>
-    <bool name="persistence_enabled">false</bool>
+    <bool name="firebase_persistence_enabled">false</bool>
 </resources>

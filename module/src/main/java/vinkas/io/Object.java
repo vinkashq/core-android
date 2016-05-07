@@ -13,9 +13,14 @@ import vinkas.util.Helper;
 /**
  * Created by Vinoth on 3-5-16.
  */
-public abstract class Object implements ValueEventListener, Firebase.CompletionListener {
+public abstract class Object implements ValueEventListener, Firebase.CompletionListener, Map.Listener {
 
     protected boolean haveData = false;
+
+    @Override
+    public void onDataChange(String key, java.lang.Object value) {
+
+    }
 
     @Override
     public void onComplete(FirebaseError firebaseError, Firebase firebase) {
@@ -62,7 +67,7 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
 
     public abstract void onRead(String key, java.lang.Object value);
 
-    protected HashMap<String, java.lang.Object> map;
+    protected Map map;
 
     public void write() {
         getFirebase().setValue(map, this);
@@ -83,13 +88,21 @@ public abstract class Object implements ValueEventListener, Firebase.CompletionL
 
     public Object(Firebase firebase) {
         setFirebase(firebase);
-        map = new HashMap<String, java.lang.Object>();
+        setMap();
     }
 
     public Object(DataSnapshot dataSnapshot) {
         setFirebase(dataSnapshot.getRef());
-        map = new HashMap<String, java.lang.Object>();
+        setMap();
         onDataChange(dataSnapshot);
+    }
+
+    protected Map getMap() {
+        return map;
+    }
+
+    protected void setMap() {
+        map = new Map(this);
     }
 
     protected Firebase firebase;

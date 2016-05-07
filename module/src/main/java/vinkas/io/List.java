@@ -12,16 +12,15 @@ import java.util.Map;
  */
 public abstract class List extends Object implements DatabaseHaver, ChildEventListener {
 
-    public abstract ListItem getItem(DataSnapshot dataSnapshot);
+    @Override
+    public void onDataChange(String key, java.lang.Object value) {
 
-    private Map<String, ListItem> items;
-
-    public Map<String, ListItem> getItems() {
-        return items;
     }
 
-    public void setItems(Map<String, ListItem> items) {
-        this.items = items;
+    public abstract ListItem getItem(DataSnapshot dataSnapshot);
+
+    public Items getItems() {
+        return (Items) getMap();
     }
 
     @Override
@@ -53,8 +52,12 @@ public abstract class List extends Object implements DatabaseHaver, ChildEventLi
 
     public List(Database database, String childPath) {
         super(database.getFirebase().child(childPath));
-        setItems(new HashMap<String, ListItem>());
         setDatabase(database);
+    }
+
+    @Override
+    protected void setMap() {
+        map = new Items(this);
     }
 
     @Override
@@ -66,5 +69,7 @@ public abstract class List extends Object implements DatabaseHaver, ChildEventLi
     public void setDatabase(Database database) {
         this.database = database;
     }
+
+
 
 }

@@ -26,4 +26,5 @@ public abstract class Item extends Object implements DatabaseHaver {
     public void setDatabase(Database database) {
         this.database = database;
     }
+
 }

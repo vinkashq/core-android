@@ -21,8 +21,7 @@ public class Helper {
     public static final int RESULT_ERROR = 1003;
 
     public static void onException(Exception exception) {
-        //if (BuildConfig.DEBUG)
-            exception.printStackTrace();
+        exception.printStackTrace();
     }
 
     public static boolean isNetworkAvailable(Context context) {

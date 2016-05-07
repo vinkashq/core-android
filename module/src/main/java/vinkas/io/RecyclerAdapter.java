@@ -14,6 +14,7 @@ import java.util.List;
  * Created by Vinoth on 6-5-16.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<ListItem.ViewHolder> {
+
     @Override
     public int getItemCount() {
         return (items != null ? items.size() : 0);
@@ -26,10 +27,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListItem.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ListItem.ViewHolder holder, int position) {
-
+        
     }
 
-    private java.util.List<ListItem> items;
+    private Items items;
     private Context context;
 
     public Context getContext() {
@@ -40,16 +41,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ListItem.ViewHolder> {
         this.context = context;
     }
 
-    public List<ListItem> getItems() {
+    public Items getItems() {
         return items;
     }
 
-    public void setItems(List<ListItem> items) {
+    public void setItems(Items items) {
         this.items = items;
+        this.items.addListener(new Items.Listener() {
+            @Override
+            public void onDataChange(String key, Object value) {
+                notifyDataSetChanged();
+            }
+        });
     }
 
-    public RecyclerAdapter(Context context, Map<String, ListItem> items) {
+    public RecyclerAdapter(Context context, Items items) {
         setContext(context);
-        getItems().addAll(items.values());
+        setItems(items);
     }
 }
