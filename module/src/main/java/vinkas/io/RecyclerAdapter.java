@@ -1,14 +1,11 @@
 package vinkas.io;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.lang.*;
 import java.lang.Object;
-import java.util.*;
-import java.util.List;
 
 /**
  * Created by Vinoth on 6-5-16.

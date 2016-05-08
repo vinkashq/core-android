@@ -2,9 +2,6 @@ package vinkas.io;
 
 import java.lang.*;
 import java.lang.Object;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * Created by Vinoth on 7-5-16.
@@ -12,8 +9,8 @@ import java.util.HashMap;
 public class Items extends Map {
 
     @Override
-    public List getObject() {
-        return (List) super.getObject();
+    public List getItem() {
+        return (List) super.getItem();
     }
 
     public Items(List list) {

@@ -8,18 +8,18 @@ import java.util.ArrayList;
  */
 public class Map extends java.util.HashMap<String, java.lang.Object> {
 
-    private Object object;
+    private Item item;
 
-    public Object getObject() {
-        return object;
+    public Item getItem() {
+        return item;
     }
 
-    public void setObject(Object object) {
-        this.object = object;
+    public void setItem(Item item) {
+        this.item = item;
     }
 
-    public Map(Object object) {
-        setObject(object);
+    public Map(Item item) {
+        setItem(item);
     }
 
     private ArrayList<Listener> listeners = new ArrayList<Listener>();
@@ -29,7 +29,7 @@ public class Map extends java.util.HashMap<String, java.lang.Object> {
     }
 
     public void onDataChange(String key, java.lang.Object value) {
-        getObject().onDataChange(key, value);
+        getItem().onDataChange(key, value);
         for (int i = 0; i < listeners.size(); i++) {
             listeners.get(i).onDataChange(key, value);
         }

@@ -18,14 +18,14 @@ public abstract class SplashActivity extends Activity {
     private boolean resultReceived = false;
 
     void authenticate() {
-        AuthData authData = getApp().getDatabase().getFirebase().getAuth();
+        AuthData authData = getApp().getFirebase().getAuth();
         if (authData == null) {
             Intent intent = new Intent(this, ConnectActivity.class);
             resultReceived = false;
             waitingForResult = true;
             startActivityForResult(intent, REQUEST_CODE_CONNECT);
         } else
-            getApp().getDatabase().onAuthenticated(authData);
+            getApp().onAuthenticated(authData);
     }
 
     public boolean isReady() {

@@ -7,10 +7,12 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import vinkas.Application;
+
 /**
  * Created by Vinoth on 6-5-16.
  */
-public abstract class ListItem extends Object {
+public abstract class ListItem extends Item {
 
     public final static String KEY = "key";
 
@@ -22,15 +24,15 @@ public abstract class ListItem extends Object {
         }
     }
 
-    public ListItem(List list, DataSnapshot dataSnapshot) {
-        super(list.getFirebase().child(dataSnapshot.getKey()));
+    public ListItem(Application application, List list, DataSnapshot dataSnapshot) {
+        super(application, list.getFirebase().child(dataSnapshot.getKey()));
         setKey(dataSnapshot.getKey());
         setList(list);
         onDataChange(dataSnapshot);
     }
 
-    public ListItem(List list) {
-        super(list.getFirebase().push());
+    public ListItem(Application application, List list) {
+        super(application, list.getFirebase().push());
         setKey(getFirebase().getKey());
         setList(list);
     }
@@ -54,8 +56,8 @@ public abstract class ListItem extends Object {
         this.key = key;
     }
 
-    public ListItem(List list, String key) {
-        super(list.getFirebase().child(key));
+    public ListItem(Application application, List list, String key) {
+        super(application, list.getFirebase().child(key));
         setKey(key);
         setList(list);
     }

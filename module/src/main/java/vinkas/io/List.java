@@ -3,14 +3,12 @@ package vinkas.io;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import vinkas.Application;
 
 /**
  * Created by Vinoth on 6-5-16.
  */
-public abstract class List extends Object implements DatabaseHaver, ChildEventListener {
+public abstract class List extends Item implements ChildEventListener {
 
     @Override
     public void onDataChange(String key, java.lang.Object value) {
@@ -47,28 +45,13 @@ public abstract class List extends Object implements DatabaseHaver, ChildEventLi
         getFirebase().addChildEventListener(this);
     }
 
-    private Database database;
-
-    public List(Database database, String childPath) {
-        super(database.getFirebase().child(childPath));
-        setDatabase(database);
+    public List(Application app, String childPath) {
+        super(app, app.getFirebase().child(childPath));
     }
 
     @Override
     protected void setMap() {
         map = new Items(this);
     }
-
-    @Override
-    public Database getDatabase() {
-        return database;
-    }
-
-    @Override
-    public void setDatabase(Database database) {
-        this.database = database;
-    }
-
-
 
 }

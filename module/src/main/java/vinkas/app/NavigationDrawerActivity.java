@@ -125,7 +125,7 @@ public abstract class NavigationDrawerActivity extends Activity
         header = view;
         TextView tvName = (TextView) header.findViewById(R.id.name);
         TextView tvEmail = (TextView) header.findViewById(R.id.email);
-        Account account = getApp().getDatabase().getAccount();
+        Account account = getApp().getAccount();
         tvName.setText(account.getName());
         tvEmail.setText(account.getEmail());
     }

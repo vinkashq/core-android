@@ -6,6 +6,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.lang.*;
 
+import vinkas.Application;
+
 /**
  * Created by Vinoth on 3-5-16.
  */
@@ -14,14 +16,14 @@ public class Account extends Item {
     private String id;
     private GoogleSignInAccount googleAccount;
 
-    public Account(Database database, AuthData authData) {
-        super(database, "accounts/" + authData.getUid());
+    public Account(Application application, AuthData authData) {
+        super(application, "accounts/" + authData.getUid());
         setId(authData.getUid());
         read();
     }
 
-    public Account(Database database, AuthData authData, GoogleSignInAccount googleAccount) {
-        super(database, "accounts/" + authData.getUid());
+    public Account(Application application, AuthData authData, GoogleSignInAccount googleAccount) {
+        super(application, "accounts/" + authData.getUid());
         setId(authData.getUid());
         this.googleAccount = googleAccount;
         read();
