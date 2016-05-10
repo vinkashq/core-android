@@ -1,9 +1,9 @@
-package vinkas.app;
+package com.vinkas.activity;
 
 import android.support.v7.app.AppCompatActivity;
 
-import vinkas.Application;
-import vinkas.util.Helper;
+import com.vinkas.library.Application;
+import com.vinkas.util.Helper;
 
 /**
  * Created by Vinoth on 3-5-16.

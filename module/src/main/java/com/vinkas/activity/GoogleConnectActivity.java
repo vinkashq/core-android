@@ -1,4 +1,4 @@
-package vinkas.app;
+package com.vinkas.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import vinkas.library.R;
-import vinkas.util.Helper;
+import com.vinkas.library.R;
+import com.vinkas.util.Helper;
 
-public class GoogleConnectActivity extends vinkas.app.Activity
+public class GoogleConnectActivity extends Activity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     @Override
@@ -25,7 +25,7 @@ public class GoogleConnectActivity extends vinkas.app.Activity
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result != null && result.isSuccess()) {
-                getApp().setGoogleSignInAccount(result.getSignInAccount());
+                getApp().getAccounts().setGoogleAccount(result.getSignInAccount());
                 sendResult(Helper.RESULT_OK);
             } else {
                 if (result.getStatus().getStatusMessage() != null)

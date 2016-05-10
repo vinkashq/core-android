@@ -1,12 +1,12 @@
-package vinkas.app;
+package com.vinkas.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.firebase.client.AuthData;
 
-import vinkas.library.R;
-import vinkas.util.Helper;
+import com.vinkas.library.R;
+import com.vinkas.util.Helper;
 
 /**
  * Created by Vinoth on 3-5-16.
@@ -25,7 +25,7 @@ public abstract class SplashActivity extends Activity {
             waitingForResult = true;
             startActivityForResult(intent, REQUEST_CODE_CONNECT);
         } else
-            getApp().onAuthenticated(authData);
+            getApp().getAccounts().onAuthenticated(authData);
     }
 
     public boolean isReady() {

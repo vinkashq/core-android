@@ -1,4 +1,4 @@
-package vinkas.app;
+package com.vinkas.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import vinkas.io.Account;
-import vinkas.library.R;
+import io.vinkas.Account;
+import com.vinkas.library.R;
 
 public abstract class NavigationDrawerActivity extends Activity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -125,7 +125,7 @@ public abstract class NavigationDrawerActivity extends Activity
         header = view;
         TextView tvName = (TextView) header.findViewById(R.id.name);
         TextView tvEmail = (TextView) header.findViewById(R.id.email);
-        Account account = getApp().getAccount();
+        Account account = getApp().getAccounts().getAccount();
         tvName.setText(account.getName());
         tvEmail.setText(account.getEmail());
     }

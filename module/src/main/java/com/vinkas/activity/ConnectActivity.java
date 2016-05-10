@@ -1,4 +1,4 @@
-package vinkas.app;
+package com.vinkas.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.view.View;
 
 import com.google.android.gms.common.SignInButton;
 
-import vinkas.library.R;
-import vinkas.util.Helper;
+import com.vinkas.library.R;
+import com.vinkas.util.Helper;
 
-public class ConnectActivity extends vinkas.app.Activity {
+public class ConnectActivity extends Activity {
 
     public final static int REQUEST_CODE_GOOGLE_CONNECT = 1001;
 

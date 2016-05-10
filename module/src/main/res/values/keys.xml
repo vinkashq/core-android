@@ -5,6 +5,8 @@
     <string name="vinkas_com">vinkas.com</string>
     <string name="vinkas_www">www.vinkas.com</string>
 
-    <string name="firebase_io_hostname">EXAMPLE.firebaseio.com</string>
+    <string name="firebase_hostname">EXAMPLE.firebaseio.com</string>
     <bool name="firebase_persistence_enabled">false</bool>
+
+    <string name="action_notification">vinkas.intent.action.NOTIFICATION</string>
 </resources>
