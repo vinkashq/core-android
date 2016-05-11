@@ -3,6 +3,7 @@ package io.vinkas;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.vinkas.util.Helper;
 
 /**
  * Created by Vinoth on 10-5-16.
@@ -40,20 +41,40 @@ public class Item {
         firebase.setValue(this, getPriority(), listener);
     }
 
-    public void writeIn(Firebase firebase, final Listener listener) {
+    public void onCreate() {
+
+    }
+
+    public void onError(FirebaseError firebaseError) {
+        Helper.onError(firebaseError);
+    }
+
+    public void writeIn(Firebase firebase, final CreateListener listener) {
         writeIn(firebase, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if(firebaseError == null)
+                if(firebaseError == null) {
+                    onCreate();
                     listener.onCreate(Item.this);
-                else
+                }
+                else {
+                    onError(firebaseError);
                     listener.onError(firebaseError);
+                }
             }
         });
     }
 
-    public void removeIn(Firebase firebase, Firebase.CompletionListener listener) {
-        firebase.child(getKey()).removeValue(listener);
+    public void removeIn(Firebase firebase, final RemoveListener listener) {
+        firebase.child(getKey()).removeValue(new Firebase.CompletionListener() {
+            @Override
+            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                if(firebaseError == null)
+                    listener.onRemove(Item.this);
+                else
+                    listener.onError(firebaseError);
+            }
+        });
     }
 
 }

@@ -1,12 +1,10 @@
 package com.vinkas.library;
 
 import com.firebase.client.Firebase;
-import com.vinkas.notification.Scheduler;
 import com.vinkas.util.Helper;
 
 
 import io.vinkas.Accounts;
-import com.vinkas.library.R;
 
 /**
  * Created by Vinoth on 3-5-16.

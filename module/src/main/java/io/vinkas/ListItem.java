@@ -9,20 +9,20 @@ import com.firebase.client.FirebaseError;
  */
 public class ListItem<Parent extends List> extends Item {
 
-    public void move(final Firebase source, final Firebase target, final Firebase.CompletionListener listener) {
+    public void move(final Firebase source, final Firebase target, final Listener listener) {
         writeIn(target, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if(firebaseError == null) {
                     removeIn(source, listener);
                 } else {
-                    listener.onComplete(firebaseError, firebase);
+                    listener.onError(firebaseError);
                 }
             }
         });
     }
 
-    public void move(Parent parent, String target, Firebase.CompletionListener listener) {
+    public void move(Parent parent, String target, Listener listener) {
         move(parent, parent.getParent().child(target), listener);
     }
 
@@ -43,7 +43,7 @@ public class ListItem<Parent extends List> extends Item {
         }
     }
 
-    public void writeTo(Parent parent, Listener listener) {
+    public void writeTo(Parent parent, CreateListener listener) {
         setFirebase(parent);
         super.writeIn(getFirebase(), listener);
     }
@@ -53,7 +53,7 @@ public class ListItem<Parent extends List> extends Item {
         super.writeIn(getFirebase(), listener);
     }
 
-    public void removeFrom(Parent parent, Firebase.CompletionListener listener) {
+    public void removeFrom(Parent parent, RemoveListener listener) {
         setFirebase(parent);
         super.removeIn(getFirebase(), listener);
     }

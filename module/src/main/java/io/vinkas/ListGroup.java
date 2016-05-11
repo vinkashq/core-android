@@ -25,17 +25,17 @@ public class ListGroup<Parent extends List, Child extends ListItem> extends Fire
         return (Parent) new List<Child>(url + "/" + key);
     }
 
-    public void move(final String from, final String to, final Child listItem, final CompletionListener listener) {
+    public void move(final String from, final String to, final Child listItem, final Listener listener) {
         Parent target = getItem(to);
-        target.add(listItem, new CompletionListener() {
+        target.add(listItem, new CreateListener() {
             @Override
-            public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if(firebaseError == null) {
-                    Parent source = getItem(from);
-                    source.remove(listItem, listener);
-                } else {
-                    listener.onComplete(firebaseError, firebase);
-                }
+            public void onCreate(Item item) {
+                Parent source = getItem(from);
+                source.remove(listItem, listener);
+            }
+            @Override
+            public void onError(FirebaseError error) {
+                listener.onError(error);
             }
         });
     }

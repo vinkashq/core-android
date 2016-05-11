@@ -17,15 +17,15 @@ public class List<Child extends ListItem> extends Firebase {
         super(repo, path);
     }
 
-    public void add(Child item, CompletionListener listener) {
+    public void add(Child item, CreateListener listener) {
         item.writeTo(this, listener);
     }
 
-    public void remove(Child item, CompletionListener listener) {
+    public void remove(Child item, RemoveListener listener) {
         item.removeFrom(this, listener);
     }
 
-    public void move(String target, Child item, CompletionListener listener) {
+    public void move(String target, Child item, Listener listener) {
         item.move(this, getParent().child(target), listener);
     }
 

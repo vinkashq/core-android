@@ -48,6 +48,11 @@ public class Accounts extends List<Account> implements Firebase.AuthResultHandle
     }
 
     @Override
+    public void onRemove(Account item) {
+
+    }
+
+    @Override
     public void onAuthenticated(AuthData authData) {
         final String key = authData.getUid();
         final Firebase f = child(key);

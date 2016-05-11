@@ -1,12 +1,15 @@
 package com.vinkas.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,12 +78,28 @@ public abstract class NavigationDrawerActivity extends Activity
         return drawer;
     }
 
+    protected ActionBarDrawerToggle toggle;
     public void setDrawer(DrawerLayout drawerLayout) {
         this.drawer = drawerLayout;
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, getToolbar(), R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_upload);
+        getSupportActionBar().setHomeButtonEnabled(true);
         toggle.syncState();
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //toggle.onConfigurationChanged(newConfig);
     }
 
     public NavigationView getNavigationView() {
@@ -150,11 +169,8 @@ public abstract class NavigationDrawerActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(getMenu(), menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
-
-    @Override
-    public abstract boolean onOptionsItemSelected(MenuItem item);
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
