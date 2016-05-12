@@ -1,8 +1,12 @@
 package io.vinkas;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.ui.RecyclerAdapter;
 
 /**
  * Created by Vinoth on 10-5-16.

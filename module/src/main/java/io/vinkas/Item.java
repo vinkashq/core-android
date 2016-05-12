@@ -53,13 +53,14 @@ public class Item {
         writeIn(firebase, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if(firebaseError == null) {
+                if (firebaseError == null) {
                     onCreate();
-                    listener.onCreate(Item.this);
-                }
-                else {
+                    if (listener != null)
+                        listener.onCreate(Item.this);
+                } else {
                     onError(firebaseError);
-                    listener.onError(firebaseError);
+                    if (listener != null)
+                        listener.onError(firebaseError);
                 }
             }
         });
@@ -69,10 +70,12 @@ public class Item {
         firebase.child(getKey()).removeValue(new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if(firebaseError == null)
+                if (firebaseError == null)
                     listener.onRemove(Item.this);
-                else
+                else {
+                    onError(firebaseError);
                     listener.onError(firebaseError);
+                }
             }
         });
     }
