@@ -1,6 +1,7 @@
 package io.vinkas;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.vinkas.util.Helper;
@@ -66,18 +67,31 @@ public class Item {
         });
     }
 
+    public Item parseSnapshot(DataSnapshot snapshot) {
+        Item item = snapshot.getValue(this.getClass());
+        item.setKey(snapshot.getKey());
+        item.setPriority(snapshot.getPriority());
+        return item;
+    }
+
     public void removeIn(Firebase firebase, final RemoveListener listener) {
-        firebase.child(getKey()).removeValue(new Firebase.CompletionListener() {
+        removeIn(firebase, new Firebase.CompletionListener() {
             @Override
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                if (firebaseError == null)
-                    listener.onRemove(Item.this);
-                else {
+                if (firebaseError == null) {
+                    if (listener != null)
+                        listener.onRemove(Item.this);
+                } else {
                     onError(firebaseError);
-                    listener.onError(firebaseError);
+                    if (listener != null)
+                        listener.onError(firebaseError);
                 }
             }
         });
+    }
+
+    public void removeIn(Firebase firebase, Firebase.CompletionListener listener) {
+        firebase.removeValue(listener);
     }
 
 }
