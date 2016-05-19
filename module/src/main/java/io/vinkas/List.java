@@ -1,20 +1,36 @@
 package io.vinkas;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.core.Path;
-import com.firebase.client.core.Repo;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.vinkas.util.Helper;
 
 /**
  * Created by Vinoth on 10-5-16.
  */
-public class List<Child extends ListItem> extends Firebase {
+public class List<Child extends ListItem> {
 
-    public List(String url) {
-        super(url);
+    static Helper helper;
+    static public Helper getHelper() {
+        if(helper == null)
+            helper = Helper.getInstance();
+        return helper;
     }
 
-    public List(Repo repo, Path path) {
-        super(repo, path);
+    private DatabaseReference reference;
+
+    public DatabaseReference getReference() {
+        return reference;
+    }
+
+    public void setReference(DatabaseReference reference) {
+        this.reference = reference;
+    }
+
+    public List(String childPath, String uId) {
+        FirebaseDatabase fdb = FirebaseDatabase.getInstance();
+        if(uId != null)
+            childPath = childPath + "/" + uId;
+        setReference(fdb.getReference(childPath));
     }
 
     public void add(Child item, CreateListener listener) {
@@ -25,8 +41,8 @@ public class List<Child extends ListItem> extends Firebase {
         item.removeFrom(this, listener);
     }
 
-    public void move(String target, Child item, Listener listener) {
-        item.move(this, getParent().child(target), listener);
-    }
+    /*public void move(String target, Child item, Listener listener) {
+        item.move(this, getReference().child(target), listener);
+    }*/
 
 }

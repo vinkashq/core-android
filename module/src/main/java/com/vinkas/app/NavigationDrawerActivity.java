@@ -1,4 +1,4 @@
-package com.vinkas.activity;
+package com.vinkas.app;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,15 +9,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import io.vinkas.Account;
-import com.vinkas.library.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vinkas.app.R;
 
 public abstract class NavigationDrawerActivity extends Activity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -144,9 +144,13 @@ public abstract class NavigationDrawerActivity extends Activity
         header = view;
         TextView tvName = (TextView) header.findViewById(R.id.name);
         TextView tvEmail = (TextView) header.findViewById(R.id.email);
-        Account account = getApp().getAccounts().getAccount();
-        tvName.setText(account.getName());
-        tvEmail.setText(account.getEmail());
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user.isAnonymous()) {
+            header.setVisibility(View.GONE);
+        } else {
+            tvName.setText(user.getDisplayName());
+            tvEmail.setText(user.getEmail());
+        }
     }
 
     public void setNavigationView(NavigationView view) {

@@ -1,11 +1,12 @@
-package com.vinkas.activity;
+package com.vinkas.app;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.firebase.client.AuthData;
-
-import com.vinkas.library.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vinkas.auth.AnonymousActivity;
+import com.vinkas.app.R;
 import com.vinkas.util.Helper;
 
 /**
@@ -13,19 +14,21 @@ import com.vinkas.util.Helper;
  */
 public abstract class SplashActivity extends Activity {
 
-    private static final int REQUEST_CODE_CONNECT = 1001;
+    private static final int REQUEST_CONNECT = 1000;
+    private static final int REQUEST_ANONYMOUS = 1001;
     private boolean waitingForResult = false;
     private boolean resultReceived = false;
 
     void authenticate() {
-        AuthData authData = getApp().getFirebase().getAuth();
-        if (authData == null) {
-            Intent intent = new Intent(this, ConnectActivity.class);
+        FirebaseAuth fa = FirebaseAuth.getInstance();
+        FirebaseUser user = fa.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(this, AnonymousActivity.class);
             resultReceived = false;
             waitingForResult = true;
-            startActivityForResult(intent, REQUEST_CODE_CONNECT);
+            startActivityForResult(intent, REQUEST_ANONYMOUS);
         } else
-            getApp().getAccounts().onAuthenticated(authData);
+            getHelper().setUser(user);
     }
 
     public boolean isReady() {
@@ -44,7 +47,7 @@ public abstract class SplashActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_CONNECT)
+        if(requestCode == REQUEST_CONNECT || requestCode == REQUEST_ANONYMOUS)
             resultReceived = true;
         waitingForResult = false;
     }

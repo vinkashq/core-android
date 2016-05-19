@@ -2,9 +2,9 @@ package io.vinkas.ui;
 
 import android.support.v7.widget.RecyclerView;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.Query;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import io.vinkas.Item;
 
@@ -13,7 +13,7 @@ import io.vinkas.Item;
  */
 public abstract class RecyclerAdapter<T extends Item, VH extends RecyclerView.ViewHolder> extends com.firebase.ui.RecyclerAdapter<T, VH> {
 
-    public RecyclerAdapter(Class<T> modelClass, int modelLayout, Class<VH> viewHolderClass, Firebase ref) {
+    public RecyclerAdapter(Class<T> modelClass, int modelLayout, Class<VH> viewHolderClass, DatabaseReference ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
     }
 

@@ -1,32 +1,37 @@
-package com.vinkas.activity;
+package com.vinkas.auth;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import com.vinkas.library.R;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.vinkas.app.R;
 import com.vinkas.util.Helper;
 
-public class GoogleConnectActivity extends Activity
+public class GoogleActivity extends Activity
         implements GoogleApiClient.OnConnectionFailedListener {
+
+    @Override
+    public String getProviderId() {
+        return "google";
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result != null && result.isSuccess()) {
-                getApp().getAccounts().setGoogleAccount(result.getSignInAccount());
-                sendResult(Helper.RESULT_OK);
+            if (result.isSuccess()) {
+                authFirebase(result.getSignInAccount());
             } else {
                 if (result.getStatus().getStatusMessage() != null)
                     Log.e("GoogleSignIn", result.getStatus().getStatusMessage());
@@ -34,6 +39,11 @@ public class GoogleConnectActivity extends Activity
                 sendResult(Helper.RESULT_ERROR);
             }
         }
+    }
+
+    public void authFirebase(GoogleSignInAccount account) {
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        signInWithCredential(authCredential);
     }
 
     @Override
@@ -53,13 +63,11 @@ public class GoogleConnectActivity extends Activity
     boolean signInPrepared = false;
 
     protected void prepareSignIn() {
-        // Configure sign-in to request the user's ID, email address, and basic profile. ID and
-        // basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
 
-        // Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
         mApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -70,11 +78,6 @@ public class GoogleConnectActivity extends Activity
 
     int RC_SIGN_IN = 1001;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_progress_bar);
-        if (savedInstanceState == null)
-            signIn();
-    }
+    private static String TAG = "GoogleAuth";
+
 }

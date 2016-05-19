@@ -1,4 +1,4 @@
-package com.vinkas.activity;
+package com.vinkas.app;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -7,7 +7,8 @@ import android.view.View;
 
 import com.google.android.gms.common.SignInButton;
 
-import com.vinkas.library.R;
+import com.vinkas.auth.GoogleActivity;
+import com.vinkas.app.R;
 import com.vinkas.util.Helper;
 
 public class ConnectActivity extends Activity {
@@ -25,7 +26,7 @@ public class ConnectActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if(Helper.isNetworkAvailable(getApplicationContext())) {
-                    Intent i = new Intent(ConnectActivity.this, GoogleConnectActivity.class);
+                    Intent i = new Intent(ConnectActivity.this, GoogleActivity.class);
                     startActivityForResult(i, REQUEST_CODE_GOOGLE_CONNECT);
                 } else {
                     AlertDialog.Builder dlgAlert = new AlertDialog.Builder(ConnectActivity.this);

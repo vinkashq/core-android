@@ -4,46 +4,65 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.firebase.client.FirebaseError;
-import com.firebase.client.FirebaseException;
-import com.vinkas.library.Application;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.FirebaseDatabase;
+import com.vinkas.app.Application;
 
 import java.util.Calendar;
 import java.util.UUID;
-
-import com.vinkas.library.R;
 
 /**
  * Created by Vinoth on 3-5-16.
  */
 public class Helper {
 
-    private static Helper helper;
     public static Helper getInstance() {
-        if(helper == null)
-            helper = new Helper();
-        return helper;
+        return getApplication().getHelper();
     }
 
-    private static Application application;
-    private static String rootUrl, userUrl;
-
-    public static String getUserId() {
-        return getApplication().getUserId();
+    private boolean ready = false;
+    public void onReady(String userId) {
+        setReady(true);
     }
 
-    public static void setUserId(String value) {
-        userUrl = rootUrl + "/users/" + value;
-        getApplication().setUserId(value);
+    public boolean isReady() {
+        return ready;
     }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    protected static Application application;
 
     public static void setApplication(Application app) {
         application = app;
-        rootUrl = "https://" + getApplication().getString(R.string.firebase_hostname);
     }
 
     public static Application getApplication() {
         return application;
+    }
+
+    private FirebaseUser user;
+
+    public FirebaseUser getUser() {
+        return user;
+    }
+
+    public void setUser(FirebaseUser value) {
+        user = value;
+        onReady(user.getUid());
+    }
+
+    private FirebaseDatabase database;
+
+    public FirebaseDatabase getDatabase() {
+        if (database == null)
+            database = FirebaseDatabase.getInstance();
+        return database;
     }
 
     public Long toTimeStamp(int day, int month, int year, int hour, int min) {
@@ -58,6 +77,7 @@ public class Helper {
 
     public static void onException(Exception exception) {
         exception.printStackTrace();
+        FirebaseCrash.report(exception);
     }
 
     public static boolean isNetworkAvailable(Context context) {
@@ -67,24 +87,16 @@ public class Helper {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static void onError(FirebaseError error) {
+    public static void onError(DatabaseError error) {
         onFirebaseException(error.toException());
     }
 
-    public static void onFirebaseException(FirebaseException firebaseException) {
-        onException(firebaseException);
+    public static void onFirebaseException(DatabaseException exception) {
+        onException(exception);
     }
 
     public static String generateId() {
         return UUID.randomUUID().toString();
-    }
-
-    public static String getRootUrl(String childPath) {
-        return rootUrl + "/" + childPath;
-    }
-
-    public static String getUserUrl(String childPath) {
-        return userUrl + "/" + childPath;
     }
 
 }

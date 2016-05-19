@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vinkas.library">
+    package="com.vinkas.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Vinkas.Light.DarkActionBar">
 
-        <activity android:name="com.vinkas.activity.ConnectActivity"
+        <activity android:name=".ConnectActivity"
             android:theme="@style/Theme.Vinkas.Light.NoActionBar" />
-        <activity android:name="com.vinkas.activity.GoogleConnectActivity"
-            android:theme="@style/Theme.Vinkas.Light.NoActionBar" />
+        <activity android:name="com.vinkas.auth.GoogleActivity" />
+        <activity android:name="com.vinkas.auth.AnonymousActivity" />
 
         <receiver android:name="com.vinkas.notification.Publisher">
             <intent-filter>
