@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
 import com.vinkas.app.Application;
+import com.vinkas.app.R;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -18,6 +19,11 @@ import java.util.UUID;
  * Created by Vinoth on 3-5-16.
  */
 public class Helper {
+
+    public Helper() {
+        database = FirebaseDatabase.getInstance();
+        database.setPersistenceEnabled(getApplication().getResources().getBoolean(R.bool.firebase_persistence_enabled));
+    }
 
     public static Helper getInstance() {
         return getApplication().getHelper();
@@ -60,8 +66,6 @@ public class Helper {
     private FirebaseDatabase database;
 
     public FirebaseDatabase getDatabase() {
-        if (database == null)
-            database = FirebaseDatabase.getInstance();
         return database;
     }
 

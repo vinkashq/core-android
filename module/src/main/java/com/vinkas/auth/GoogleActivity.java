@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 import com.vinkas.app.R;
 import com.vinkas.util.Helper;
 
@@ -21,17 +22,12 @@ public class GoogleActivity extends Activity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     @Override
-    public String getProviderId() {
-        return "google";
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
-                authFirebase(result.getSignInAccount());
+                setAccount(result.getSignInAccount());
             } else {
                 if (result.getStatus().getStatusMessage() != null)
                     Log.e("GoogleSignIn", result.getStatus().getStatusMessage());
@@ -41,7 +37,14 @@ public class GoogleActivity extends Activity
         }
     }
 
-    public void authFirebase(GoogleSignInAccount account) {
+    private GoogleSignInAccount account;
+
+    public GoogleSignInAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(GoogleSignInAccount googleSignInAccount) {
+        account = googleSignInAccount;
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         signInWithCredential(authCredential);
     }

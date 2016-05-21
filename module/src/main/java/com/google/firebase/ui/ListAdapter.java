@@ -26,7 +26,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.firebase.ui;
+package com.google.firebase.ui;
 
 import android.app.Activity;
 import android.view.View;

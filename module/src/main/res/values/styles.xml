@@ -4,14 +4,12 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="android:colorBackground">@android:color/white</item>
     </style>
 
     <style name="Theme.Vinkas.Light.DarkActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="android:colorBackground">@android:color/white</item>
     </style>
 
     <style name="Theme.Vinkas.Light.NoActionBar">

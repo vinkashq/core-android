@@ -1,4 +1,4 @@
-package io.vinkas;
+package com.vinkas.firebase;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,7 +27,7 @@ public class List<Child extends ListItem> {
     }
 
     public List(String childPath, String uId) {
-        FirebaseDatabase fdb = FirebaseDatabase.getInstance();
+        FirebaseDatabase fdb = getHelper().getDatabase();
         if(uId != null)
             childPath = childPath + "/" + uId;
         setReference(fdb.getReference(childPath));

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,17 +21,30 @@ import com.vinkas.app.R;
  */
 public abstract class Activity extends com.vinkas.app.Activity implements OnCompleteListener<AuthResult>, FirebaseAuth.AuthStateListener {
 
-    public abstract String getProviderId();
+    private FirebaseUser user;
+
+    public FirebaseUser getUser() {
+        return user;
+    }
+
+    public void setUser(FirebaseUser firebaseUser) {
+        this.user = firebaseUser;
+        if(getHelper().getUser() == null) {
+            onSignIn();
+        }
+    }
+
+    public void onSignIn() {
+        getHelper().setUser(getUser());
+        getAnalytics().logEvent(FirebaseAnalytics.Event.LOGIN, null);
+        sendResult(Helper.RESULT_OK);
+    }
 
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            if (user.getProviderId().equals(getProviderId())) {
-                getHelper().setUser(user);
-                sendResult(Helper.RESULT_OK);
-            }
+            setUser(user);
         } else {
             Log.d(TAG, "onAuthStateChanged:signed_out");
         }

@@ -5,12 +5,12 @@ import com.vinkas.util.Helper;
 /**
  * Created by Vinoth on 19-5-16.
  */
-public class Fragment extends android.support.v4.app.Fragment {
+public class Fragment<H extends Helper> extends android.support.v4.app.Fragment {
 
-    private Helper helper;
-    public Helper getHelper() {
+    private H helper;
+    public H getHelper() {
         if(helper == null)
-            helper = Helper.getInstance();
+            helper = (H) H.getInstance();
         return helper;
     }
 

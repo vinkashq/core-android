@@ -1,4 +1,4 @@
-package io.vinkas;
+package com.vinkas.firebase;
 
 /**
  * Created by Vinoth on 11-5-16.

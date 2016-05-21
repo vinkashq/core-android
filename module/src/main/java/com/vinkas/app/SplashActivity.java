@@ -3,10 +3,9 @@ package com.vinkas.app;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.vinkas.auth.AnonymousActivity;
-import com.vinkas.app.R;
 import com.vinkas.util.Helper;
 
 /**
@@ -23,10 +22,10 @@ public abstract class SplashActivity extends Activity {
         FirebaseAuth fa = FirebaseAuth.getInstance();
         FirebaseUser user = fa.getCurrentUser();
         if (user == null) {
-            Intent intent = new Intent(this, AnonymousActivity.class);
+            Intent intent = new Intent(this, ConnectActivity.class);
             resultReceived = false;
             waitingForResult = true;
-            startActivityForResult(intent, REQUEST_ANONYMOUS);
+            startActivityForResult(intent, REQUEST_CONNECT);
         } else
             getHelper().setUser(user);
     }
@@ -56,6 +55,8 @@ public abstract class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        if(savedInstanceState == null)
+            getAnalytics().logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
     }
 
     protected void initialize() {

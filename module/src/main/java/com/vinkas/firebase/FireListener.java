@@ -1,4 +1,4 @@
-package io.vinkas;
+package com.vinkas.firebase;
 
 import com.google.firebase.database.DatabaseError;
 
