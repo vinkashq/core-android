@@ -17,7 +17,7 @@
         <activity android:name="com.vinkas.auth.GoogleActivity" />
         <activity android:name="com.vinkas.auth.AnonymousActivity" />
 
-        <receiver android:name="com.vinkas.notification.Publisher">
+        <receiver android:name="com.vinkas.notifier.Publisher">
             <intent-filter>
                 <data android:host="notification.vinkas.com" android:scheme="publisher" />
                 <action android:name="vinkas.intent.action.NOTIFICATION" />

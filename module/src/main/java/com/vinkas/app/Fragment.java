@@ -8,10 +8,10 @@ import com.vinkas.util.Helper;
 public class Fragment<H extends Helper> extends android.support.v4.app.Fragment {
 
     private H helper;
+
     public H getHelper() {
-        if(helper == null)
+        if (helper == null)
             helper = (H) H.getInstance();
         return helper;
     }
-
 }

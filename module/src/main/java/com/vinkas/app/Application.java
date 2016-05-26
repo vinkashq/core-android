@@ -1,5 +1,6 @@
 package com.vinkas.app;
 
+import com.google.firebase.FirebaseApp;
 import com.vinkas.util.Helper;
 
 /**
@@ -26,6 +27,12 @@ public abstract class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if(!FirebaseApp.getApps(this).isEmpty())
+            onFirebaseCreate();
+
+    }
+
+    public void onFirebaseCreate() {
         setHelper();
     }
 

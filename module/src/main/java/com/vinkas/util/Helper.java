@@ -1,14 +1,19 @@
 package com.vinkas.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.vinkas.app.Application;
 import com.vinkas.app.R;
 
@@ -20,9 +25,16 @@ import java.util.UUID;
  */
 public class Helper {
 
-    public Helper() {
+    public Helper(Boolean firebase_persistence_enabled) {
         database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(getApplication().getResources().getBoolean(R.bool.firebase_persistence_enabled));
+        database.setPersistenceEnabled(firebase_persistence_enabled);
+        config = FirebaseRemoteConfig.getInstance();
+        config.fetch().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                config.activateFetched();
+            }
+        });
     }
 
     public static Helper getInstance() {
@@ -30,6 +42,7 @@ public class Helper {
     }
 
     private boolean ready = false;
+
     public void onReady(String userId) {
         setReady(true);
     }
@@ -64,9 +77,14 @@ public class Helper {
     }
 
     private FirebaseDatabase database;
+    private FirebaseRemoteConfig config;
 
     public FirebaseDatabase getDatabase() {
         return database;
+    }
+
+    public FirebaseRemoteConfig getConfig() {
+        return config;
     }
 
     public Long toTimeStamp(int day, int month, int year, int hour, int min) {

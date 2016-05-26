@@ -2,10 +2,14 @@ package com.vinkas.app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.vinkas.util.Helper;
 
 /**
@@ -30,8 +34,9 @@ public abstract class SplashActivity extends Activity {
             getHelper().setUser(user);
     }
 
+    private boolean configReady;
     public boolean isReady() {
-        if (getApp().isReady())
+        if (configReady && getApp().isReady())
             return true;
         return false;
     }
@@ -73,7 +78,19 @@ public abstract class SplashActivity extends Activity {
             }
         };
         thread.start();
+        initConfig();
         authenticate();
+    }
+
+    protected void initConfig() {
+        final FirebaseRemoteConfig config = getHelper().getConfig();
+        getHelper().getConfig().fetch().addOnCompleteListener(this, new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                config.activateFetched();
+                configReady = true;
+            }
+        });
     }
 
     protected void startMainActivity() {
