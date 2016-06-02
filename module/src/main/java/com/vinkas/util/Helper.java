@@ -25,6 +25,7 @@ import java.util.UUID;
  */
 public class Helper {
 
+    private boolean configReady = false;
     public Helper(Boolean firebase_persistence_enabled) {
         database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(firebase_persistence_enabled);
@@ -33,8 +34,13 @@ public class Helper {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 config.activateFetched();
+                configReady = true;
             }
         });
+    }
+
+    public boolean isConfigReady() {
+        return configReady;
     }
 
     public static Helper getInstance() {

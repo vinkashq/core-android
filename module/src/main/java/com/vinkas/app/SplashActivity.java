@@ -34,9 +34,8 @@ public abstract class SplashActivity extends Activity {
             getHelper().setUser(user);
     }
 
-    private boolean configReady;
     public boolean isReady() {
-        if (configReady && getApp().isReady())
+        if (getApp().isReady())
             return true;
         return false;
     }
@@ -51,7 +50,7 @@ public abstract class SplashActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CONNECT || requestCode == REQUEST_ANONYMOUS)
+        if (requestCode == REQUEST_CONNECT || requestCode == REQUEST_ANONYMOUS)
             resultReceived = true;
         waitingForResult = false;
     }
@@ -60,7 +59,7 @@ public abstract class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if(savedInstanceState == null)
+        if (savedInstanceState == null)
             getAnalytics().logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
     }
 
@@ -69,28 +68,19 @@ public abstract class SplashActivity extends Activity {
             @Override
             public void run() {
                 try {
-                    while (isReady() == false)
+                    while (!isReady())
                         sleep(1000);
-                    startMainActivity();
+                    if (getCallingActivity() == null)
+                        startMainActivity();
+                    else
+                        sendResult(Helper.RESULT_OK);
                 } catch (InterruptedException e) {
                     Helper.onException(e);
                 }
             }
         };
         thread.start();
-        initConfig();
         authenticate();
-    }
-
-    protected void initConfig() {
-        final FirebaseRemoteConfig config = getHelper().getConfig();
-        getHelper().getConfig().fetch().addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                config.activateFetched();
-                configReady = true;
-            }
-        });
     }
 
     protected void startMainActivity() {
